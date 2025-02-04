@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <p id="scorer">score:<span id="score">0</span></p>
+        <h1>Multiplication Game</h1>
+        <p id="question">What is <span id="number1"></span> multiplied by <span id="number2"></span>?</p>
+        <input type="number" id="answer" placeholder="Enter your answer">
+        <button onclick="checkAnswer()">Submit Answer</button>
+        <p id="feedback"></p>
+        <button id="next-question" onclick="generateQuestion()" style="display: none;">Next Question</button>
+    </div>
+
+    <script >
+
+        let num1, num2, correctAnswer;
+        let score = JSON.parse(localStorage.getItem('score')) || 0;  // Retrieve the score from localStorage, default to 0 if none
+        
+        document.querySelector('#score').innerText = score;
+        
+        function generateQuestion() {
+            num1 = Math.floor(Math.random() * 20) + 1; 
+            num2 = Math.floor(Math.random() * 10) + 1; 
+            correctAnswer = num1 * num2;
+        
+            document.querySelector('#number1').innerText = num1;
+            document.querySelector('#number2').innerText = num2;
+        
+            document.querySelector('#answer').value = '';
+            document.querySelector('#feedback').innerText = '';
+            document.querySelector('#next-question').style.display = 'none';
+        }
+        
+        // Function to check the user's answer and update the score
+        function checkAnswer() {
+            const userAnswer = parseInt(document.querySelector('#answer').value);
+        
+            if (userAnswer === correctAnswer) {
+                document.querySelector('#feedback').innerText = 'Correct! Well done!';
+                document.querySelector('#next-question').style.display = 'inline-block';
+                score++;
+                document.querySelector('#score').innerText = score;
+                localStorage.setItem('score', JSON.stringify(score));  // Save the score to localStorage
+            } else {
+                document.querySelector('#feedback').innerText = 'Incorrect. Try again!';
+                document.querySelector('#next-question').style.display = 'inline-block';
+                score--;
+                document.querySelector('#score').innerText = score;
+                localStorage.setItem('score', JSON.stringify(score));  // Save the score to localStorage
+            }
+        }
+        
+        
+        
+        generateQuestion();
+        
+    </script>
+</body>
+</html>
